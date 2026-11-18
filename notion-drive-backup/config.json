@@ -1,0 +1,15 @@
+{
+  "log": {
+    "enabled": true,
+    "destination": "drive",
+    "driveFolderName": "Notion Backup Logs",
+    "driveParentFolderId": "root",
+    "notionLogPageTitle": "Notion Backup Logs",
+    "notionParentPageId": null,
+    "fileNamePattern": "{date}-{operation}-log.md",
+    "includePageUrls": true
+  },
+  "restore": {
+    "diffCheck": true
+  }
+}
