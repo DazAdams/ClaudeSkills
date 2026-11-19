@@ -1,0 +1,19 @@
+{
+  "destination": "drive",
+  "drive": {
+    "folderName": "Chrome Backups",
+    "parentFolderId": "root",
+    "keepLocalCopy": false
+  },
+  "local": {
+    "path": "%USERPROFILE%\\chrome-backups",
+    "keep": 10
+  },
+  "profiles": "all",
+  "includeReadingList": true,
+  "passwords": {
+    "enabled": false,
+    "destination": "local",
+    "path": "%USERPROFILE%\\chrome-backups\\passwords"
+  }
+}
