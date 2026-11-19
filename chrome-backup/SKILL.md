@@ -28,15 +28,16 @@ Settings: `config.json` next to this file. If missing, use the defaults shown th
    python -I "<skill-dir>\scripts\chrome_backup.py" backup --out "<local.path expanded>" --keep <local.keep>
    ```
    Report the archive path and size.
-4. **Drive destination:** stage the zip in the scratchpad (or a temp folder), then upload it:
+4. **Drive destination:** stage the zip inside the session's working directory, then upload it. The file reference in the upload step is refused for files elsewhere (a scratchpad or temp path was rejected in testing), so use a uniquely named staging folder in the working directory and delete it afterwards. Use the full path, not the 8.3 short form with `~`.
    ```powershell
-   python -I "<skill-dir>\scripts\chrome_backup.py" backup --out "<scratchpad>\chrome-backup-staging"
+   python -I "<skill-dir>\scripts\chrome_backup.py" backup --out "<working-dir>\chrome-backup-staging"
    ```
    The script prints `ARCHIVE=`, `SIZE=` and `SHA256=`. Then, with the Google Drive connector (load deferred tools with ToolSearch if needed):
    - `search_files` for the folder (`title = '<drive.folderName>' and mimeType = 'application/vnd.google-apps.folder' and parentId = '<drive.parentFolderId>'`); create it with `create_file` (`mimeType` folder) if absent. If Drive reports the folder is shared with others, tell the user and ask before uploading.
    - `create_file` with `title` = the zip's file name, `parentId` = the folder id, `contentMimeType: application/zip`, `disableConversionToGoogleType: true`, and `base64Content` set to the file reference `sha256:<SHA256>:<ARCHIVE path with / separators>` (the app fills in the bytes, so don't base64 it yourself).
    - Confirm by `search_files` on the new file and compare size to `SIZE=`.
-   - If `drive.keepLocalCopy` is false, delete the staged zip afterwards. Keep it if the upload failed, and say so.
+   - Optionally check `get_file_permissions` shows only the owner.
+   - If `drive.keepLocalCopy` is false, delete the staged zip and staging folder afterwards (it sits in the working directory, so don't leave it where git could pick it up). Keep it if the upload failed, and say so.
    If the Drive connector is missing or failing, stop and say which; offer the local destination instead rather than silently switching.
 5. Report: profiles with bookmark counts and reading-list count, destination (Drive link or path), size, and any notes from the script.
 
